@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    firtname :{
+    firstName :{
         type : String,
         required : true,
         trim : true,
         minlength : 3,
         maxlength : 20
     },
-    lastname :{
+    lastName :{
         type : String,
         required : true,
         trim : true,
@@ -30,7 +30,13 @@ const userSchema = new mongoose.Schema({
         trim : true,
         unique : true,
         index : true,
-        lowercase : true
+        lowercase : true,
+        validate: {
+            validator: function(email) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+            },
+            message: 'Please enter a valid email address'
+        }
     },
     hash_password : {
         type : String,
@@ -39,7 +45,7 @@ const userSchema = new mongoose.Schema({
     role : {
         type : String,
         enum : ['user', 'admin'],
-        default : 'admin'
+        default : 'user'
     },
     contact : {type : String},
     profilePicture : {type : String},
@@ -49,7 +55,12 @@ const userSchema = new mongoose.Schema({
 
 userSchema.virtual('password')
 .set(function(password){
-    //this.hash_password = 
+    this.hash_password = bcrypt.hashSync(password,10); 
 });
 
+userSchema.methods = {
+    authenticate: function(){
+        return bcrypt.compareSync(password, this.hash_password)
+    }
+}
 module.exports = mongoose.model('User',userSchema);

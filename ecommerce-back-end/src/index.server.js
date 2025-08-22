@@ -4,8 +4,8 @@ const app = express();
 const bodyParser  =require('body-parser');
 const mongoose = require('mongoose');
 
-//
-const userRoutes = require('./routes/user');
+//routes
+const authRoutes = require('./routes/auth');
 //environment variable or you can say constants
 env.config();
 
@@ -13,11 +13,7 @@ env.config();
 //mongodb+srv://root:<db_password>@cluster0.qgjbhkw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 mongoose.connect(
-    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.qgjbhkw.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority&appName=Cluster0`,
-    {
-        useNewUrlParser: true, 
-        useUnifiedTopology: true
-    }
+    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.qgjbhkw.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority&appName=Cluster0`
 ).then(() => {
     console.log('Database connected.')
 }).catch((error) => {
@@ -27,7 +23,7 @@ mongoose.connect(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api',userRoutes);
+app.use('/api',authRoutes);
 
 app.listen(process.env.PORT, ()=> {
     console.log(`Server is running on port ${process.env.PORT}`);
