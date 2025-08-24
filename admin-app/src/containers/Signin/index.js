@@ -1,4 +1,6 @@
 import React from 'react'
+import Layout from '../../components/Layout'
+import { Container } from 'react-bootstrap'
 
 /**
 * @author
@@ -7,7 +9,11 @@ import React from 'react'
 
 export const Signin = (props) => {
   return(
-    <div>Signin</div>
+   <Layout>
+<Container>
+
+</Container>
+   </Layout>
    )
 
  }
